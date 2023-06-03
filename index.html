@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ランダム江戸川コナン</title>
+  <style>
+      .head {
+          font-family: sans-serif;
+      }
+    /* ボタンのスタイル */
+    .button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      font-size: 1.4rem;
+      font-weight: bolder;
+      border : none;
+      border-radius: 0.4rem;
+      background-color: #e70012;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .sharebutton {
+      display: inline-block;
+      padding: 1rem 2rem;
+      font-size: 1.4rem;
+      font-weight: bolder;
+      border: none;
+      border-radius: 0.4rem;
+      background-color: #1da1f2;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* ボタンのホバー時のスタイル */
+    .button:hover {
+      background-color: #e03b49;
+    }
+
+    /* ボタンのアクティブ時のスタイル */
+    .button:active {
+      background-color: #e70012;
+    }
+
+    /* シェアボタンのホバー時のスタイル */
+    .sharebutton:hover {
+      background-color: #1da0f2c7;
+    }
+
+    /* シェアボタンのアクティブ時のスタイル */
+    .sharebutton:active {
+      background-color: #1da1f2;
+    }
+
+    /* テキストのスタイル */
+    #randomText {
+      font-size: 1.2rem;
+      font-family: sans-serif;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="head" >ランダム江戸川コナン</h1>
+
+  <button id="randomButton" class="button">ランダム江戸川コナン</button>
+  <button id="playButton" class="button">本物を聴く</button>
+  <p><img src="static/image/chara01.jpg"></p>
+  
+  <p id="randomText"></p>
+  <button id="shareButton" class="sharebutton">ツイートする</button>
+
+  <script>
+    const words = ["小さくなっても", "頭脳は同じ", "迷宮なしの", "名探偵", "真実は", "いつも", "ひとつ"];
+    const originalwords = ["小さくなっても", "頭脳は同じ", "迷宮なしの", "名探偵", "真実は", "いつも", "ひとつ"];
+
+    // ランダムな文章を生成する関数
+    function generateRandomText() {
+      const shuffledWords = words.sort(() => 0.5 - Math.random());
+      const randomText = shuffledWords.join(" ");
+      return randomText;
+    }
+    let index = 0;
+    let audio;
+    function playsound(){
+        if(index < words.length){
+            const word = words[index];
+            const audio = new Audio(`static/audio/${word}.mp3`);
+            audio.play();
+            index++;
+            audio.onended = playsound;
+        }
+    }
+
+    // ランダム江戸川コナンボタンのクリックイベントハンドラ
+document.getElementById("randomButton").addEventListener("click", () => {
+  const randomText = generateRandomText();
+  document.getElementById("randomText").textContent = randomText;
+  // ここで音声の再生を行う
+  if (!audio || audio.ended) {
+    index = 0;
+    playsound();
+  }
+});
+
+// 本物を聴くボタンのクリックイベントハンドラ
+document.getElementById("playButton").addEventListener("click", () => {
+  const originalText = originalwords.join(" ");
+  document.getElementById("randomText").textContent = originalText;
+  // ここで音声の再生を行う
+  if (!audio || audio.ended) {
+    audio = new Audio('static/audio/セリフ.mp3');
+    audio.play();
+  }
+});
+    
+    // Twitter共有ボタンのクリックイベントハンドラ
+    document.getElementById("shareButton").addEventListener("click", () => {
+      const randomText = document.getElementById("randomText").textContent;
+      const tweetText = encodeURIComponent("ランダム江戸川コナン: " + randomText);
+      const url = encodeURIComponent(window.location.href);
+      const shareUrl = "https://twitter.com/intent/tweet?text=" + tweetText + "&url=" + url;
+      window.open(shareUrl, "_blank");
+    });
+  </script>
+</body>
+</html>
