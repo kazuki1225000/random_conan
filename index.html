@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <title>ランダム江戸川コナン</title>
   <style>
-      .head {
-          font-family: sans-serif;
-      }
+    .head {
+      font-family: sans-serif;
+    }
+
     /* ボタンのスタイル */
     .button {
       display: inline-block;
@@ -61,7 +62,7 @@
   </style>
 </head>
 <body>
-  <h1 class="head" >ランダム江戸川コナン</h1>
+  <!-- <h1 class="head">ランダム江戸川コナン</h1> -->
 
   <button id="randomButton" class="button">ランダム江戸川コナン</button>
   <button id="playButton" class="button">本物を聴く</button>
@@ -73,47 +74,55 @@
   <script>
     const words = ["小さくなっても", "頭脳は同じ", "迷宮なしの", "名探偵", "真実は", "いつも", "ひとつ"];
     const originalwords = ["小さくなっても", "頭脳は同じ", "迷宮なしの", "名探偵", "真実は", "いつも", "ひとつ"];
+    let index = 0;
+    let audio;
 
     // ランダムな文章を生成する関数
     function generateRandomText() {
-      const shuffledWords = words.sort(() => 0.5 - Math.random());
+      const isCorrectOrder = Math.random() < 0.005;
+      const shuffledWords = isCorrectOrder ? originalwords : words.sort(() => 0.5 - Math.random());
       const randomText = shuffledWords.join(" ");
+
       return randomText;
     }
-    let index = 0;
-    let audio;
-    function playsound(){
-        if(index < words.length){
-            const word = words[index];
-            const audio = new Audio(`static/audio/${word}.mp3`);
-            audio.play();
-            index++;
-            audio.onended = playsound;
-        }
+
+    function playSound() {
+      if (index < words.length) {
+        const word = words[index];
+        audio = new Audio(`static/audio/${word}.mp3`);
+        audio.play();
+        index++;
+        audio.onended = playSound;
+      }
     }
 
     // ランダム江戸川コナンボタンのクリックイベントハンドラ
-document.getElementById("randomButton").addEventListener("click", () => {
-  const randomText = generateRandomText();
-  document.getElementById("randomText").textContent = randomText;
-  // ここで音声の再生を行う
-  if (!audio || audio.ended) {
-    index = 0;
-    playsound();
-  }
-});
+    document.getElementById("randomButton").addEventListener("click", () => {
+      const randomText = generateRandomText();
+      document.getElementById("randomText").textContent = randomText;
+      // ここで音声の再生を行う
+      if (randomText === originalwords.join(" ")) {
+        audio = new Audio('static/audio/セリフ.mp3');
+        audio.play();
+      } else {
+        if (!audio || audio.ended) {
+          index = 0;
+          playSound();
+        }
+      }
+    });
 
-// 本物を聴くボタンのクリックイベントハンドラ
-document.getElementById("playButton").addEventListener("click", () => {
-  const originalText = originalwords.join(" ");
-  document.getElementById("randomText").textContent = originalText;
-  // ここで音声の再生を行う
-  if (!audio || audio.ended) {
-    audio = new Audio('static/audio/セリフ.mp3');
-    audio.play();
-  }
-});
-    
+    // 本物を聴くボタンのクリックイベントハンドラ
+    document.getElementById("playButton").addEventListener("click", () => {
+      const originalText = originalwords.join(" ");
+      document.getElementById("randomText").textContent = originalText;
+      // ここで音声の再生を行う
+      if (!audio || audio.ended) {
+        audio = new Audio('static/audio/セリフ.mp3');
+        audio.play();
+      }
+    });
+
     // Twitter共有ボタンのクリックイベントハンドラ
     document.getElementById("shareButton").addEventListener("click", () => {
       const randomText = document.getElementById("randomText").textContent;
