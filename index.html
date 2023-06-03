@@ -71,7 +71,7 @@
   <p id="randomText"></p>
   <button id="shareButton" class="sharebutton">ツイートする</button>
 
-  <!-- <script>
+  <script>
     const words = ["小さくなっても", "頭脳は同じ", "迷宮なしの", "名探偵", "真実は", "いつも", "ひとつ"];
     const originalwords = ["小さくなっても", "頭脳は同じ", "迷宮なしの", "名探偵", "真実は", "いつも", "ひとつ"];
     let index = 0;
@@ -99,68 +99,6 @@
     // ランダム江戸川コナンボタンのクリックイベントハンドラ
     document.getElementById("randomButton").addEventListener("click", () => {
       const randomText = generateRandomText();
-      document.getElementById("randomText").textContent = randomText;
-      // ここで音声の再生を行う
-      if (randomText === originalwords.join(" ")) {
-        audio = new Audio('static/audio/セリフ.mp3');
-        audio.play();
-      } else {
-        if (!audio || audio.ended) {
-          index = 0;
-          playSound();
-        }
-      }
-    });
-
-    // 本物を聴くボタンのクリックイベントハンドラ
-    document.getElementById("playButton").addEventListener("click", () => {
-      const originalText = originalwords.join(" ");
-      document.getElementById("randomText").textContent = originalText;
-      // ここで音声の再生を行う
-      if (!audio || audio.ended) {
-        audio = new Audio('static/audio/セリフ.mp3');
-        audio.play();
-      }
-    });
-
-    // Twitter共有ボタンのクリックイベントハンドラ
-    document.getElementById("shareButton").addEventListener("click", () => {
-      const randomText = document.getElementById("randomText").textContent;
-      const tweetText = encodeURIComponent("ランダム江戸川コナン: " + randomText);
-      const url = encodeURIComponent(window.location.href);
-      const shareUrl = "https://twitter.com/intent/tweet?text=" + tweetText + "&url=" + url;
-      window.open(shareUrl, "_blank");
-    });
-  </script> -->
-
-  <script>
-    const originalwords = ["小さくなっても", "頭脳は同じ", "迷宮なしの", "名探偵", "真実は", "いつも", "ひとつ"];
-    const words = ["迷宮なしの", "頭脳は同じ",  "ひとつ" , "小さくなっても",  "真実は", "名探偵","いつも"];
-    let index = 0;
-    let audio;
-
-    // ランダムな文章を生成する関数
-    function generateRandomText() {
-      const isCorrectOrder = Math.random() < 0.005;
-      const shuffledWords = isCorrectOrder ? originalwords : words.sort(() => 0.5 - Math.random());
-      const randomText = shuffledWords.join(" ");
-
-      return randomText;
-    }
-
-    function playSound() {
-      if (index < words.length) {
-        const word = words[index];
-        audio = new Audio(`static/audio/${word}.mp3`);
-        audio.play();
-        index++;
-        audio.onended = playSound;
-      }
-    }
-
-    // ランダム江戸川コナンボタンのクリックイベントハンドラ
-    document.getElementById("randomButton").addEventListener("click", () => {
-      const randomText = words.join(" ");
       document.getElementById("randomText").textContent = randomText;
       // ここで音声の再生を行う
       if (randomText === originalwords.join(" ")) {
